@@ -74,3 +74,42 @@ public:
             cout << endl;
         }
     }
+
+    void shortestPath(char startL[], char endL[]) {
+        int start = findVertex(startL);
+        int end = findVertex(endL);
+
+        if (start == -1 || end == -1) return;
+
+        int dist[MAX], prev[MAX];
+        bool visited[MAX];
+
+        for (int i = 0; i < count; i++) {
+            dist[i] = INT_MAX;
+            prev[i] = -1;
+            visited[i] = false;
+        }
+
+        dist[start] = 0;
+
+        for (int i = 0; i < count; i++) {
+            int cur = -1, min = INT_MAX;
+
+            for (int j = 0; j < count; j++)
+                if (!visited[j] && dist[j] < min) {
+                    min = dist[j];
+                    cur = j;
+                }
+
+            if (cur == -1) break;
+
+            visited[cur] = true;
+
+            for (int j = 0; j < count; j++)
+                if (adj[cur][j] > 0 &&
+                    dist[cur] != INT_MAX &&
+                    dist[cur] + adj[cur][j] < dist[j]) {
+                    dist[j] = dist[cur] + adj[cur][j];
+                    prev[j] = cur;
+                }
+        }
