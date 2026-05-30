@@ -113,3 +113,70 @@ public:
                     prev[j] = cur;
                 }
         }
+
+        if (dist[end] == INT_MAX) {
+            cout << "No path\n";
+            return;
+        }
+
+        int path[MAX], size = 0;
+
+        for (int v = end; v != -1; v = prev[v])
+            path[size++] = v;
+
+        for (int i = size - 1; i >= 0; i--) {
+            cout << labels[path[i]];
+            if (i) cout << " -> ";
+        }
+
+        cout << "\nTotal: " << dist[end] << endl;
+    }
+};
+
+int main() {
+    Graph g;
+    int choice, weight;
+    char a[50], b[50];
+
+    while (true) {
+        cout << "\n1 Add Vertex";
+        cout << "\n2 Add Edge";
+        cout << "\n3 Remove Vertex";
+        cout << "\n4 Remove Edge";
+        cout << "\n5 Shortest Path";
+        cout << "\n6 Print";
+        cout << "\n7 Quit";
+        cout << "\nChoice: ";
+
+        cin >> choice;
+
+        if (choice == 1) {
+            cin >> a;
+            g.addVertex(a);
+        }
+        else if (choice == 2) {
+            cin >> a >> b >> weight;
+            g.addEdge(a, b, weight);
+        }
+        else if (choice == 3) {
+            cin >> a;
+            g.removeVertex(a);
+        }
+        else if (choice == 4) {
+            cin >> a >> b;
+            g.removeEdge(a, b);
+        }
+        else if (choice == 5) {
+            cin >> a >> b;
+            g.shortestPath(a, b);
+        }
+        else if (choice == 6) {
+            g.printTable();
+        }
+        else if (choice == 7) {
+            break;
+        }
+    }
+
+    return 0;
+}
