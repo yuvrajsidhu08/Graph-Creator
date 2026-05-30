@@ -35,3 +35,42 @@ public:
         if (a != -1 && b != -1)
             adj[a][b] = w;
     }
+
+    void removeEdge(char from[], char to[]) {
+        int a = findVertex(from);
+        int b = findVertex(to);
+        if (a != -1 && b != -1)
+            adj[a][b] = 0;
+    }
+
+    void removeVertex(char label[]) {
+        int v = findVertex(label);
+        if (v == -1) return;
+
+        for (int i = v; i < count - 1; i++)
+            strcpy(labels[i], labels[i + 1]);
+
+        for (int i = v; i < count - 1; i++)
+            for (int j = 0; j < count; j++)
+                adj[i][j] = adj[i + 1][j];
+
+        for (int j = v; j < count - 1; j++)
+            for (int i = 0; i < count; i++)
+                adj[i][j] = adj[i][j + 1];
+
+        count--;
+    }
+
+    void printTable() {
+        cout << "  ";
+        for (int i = 0; i < count; i++)
+            cout << labels[i] << " ";
+        cout << endl;
+
+        for (int i = 0; i < count; i++) {
+            cout << labels[i] << " ";
+            for (int j = 0; j < count; j++)
+                cout << adj[i][j] << " ";
+            cout << endl;
+        }
+    }
