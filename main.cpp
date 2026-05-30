@@ -9,6 +9,7 @@ class Graph {
     int adj[MAX][MAX];
     int count;
 
+    // find index of vertex by label
     int findVertex(char label[]) {
         for (int i = 0; i < count; i++)
             if (strcmp(labels[i], label) == 0)
@@ -17,6 +18,7 @@ class Graph {
     }
 
 public:
+    // initialize graph
     Graph() {
         count = 0;
         for (int i = 0; i < MAX; i++)
@@ -24,11 +26,13 @@ public:
                 adj[i][j] = 0;
     }
 
+    // add vertex
     void addVertex(char label[]) {
         if (count < MAX)
             strcpy(labels[count++], label);
     }
 
+    // add directed weighted edge
     void addEdge(char from[], char to[], int w) {
         int a = findVertex(from);
         int b = findVertex(to);
@@ -36,6 +40,7 @@ public:
             adj[a][b] = w;
     }
 
+    // remove directed edge
     void removeEdge(char from[], char to[]) {
         int a = findVertex(from);
         int b = findVertex(to);
@@ -43,17 +48,21 @@ public:
             adj[a][b] = 0;
     }
 
+    // remove vertex and shift graph
     void removeVertex(char label[]) {
         int v = findVertex(label);
         if (v == -1) return;
 
+        // shift labels
         for (int i = v; i < count - 1; i++)
             strcpy(labels[i], labels[i + 1]);
 
+        // shift rows
         for (int i = v; i < count - 1; i++)
             for (int j = 0; j < count; j++)
                 adj[i][j] = adj[i + 1][j];
 
+        // shift columns
         for (int j = v; j < count - 1; j++)
             for (int i = 0; i < count; i++)
                 adj[i][j] = adj[i][j + 1];
@@ -61,6 +70,7 @@ public:
         count--;
     }
 
+    // print adjacency table
     void printTable() {
         cout << "  ";
         for (int i = 0; i < count; i++)
@@ -75,6 +85,7 @@ public:
         }
     }
 
+    // Dijkstra shortest path
     void shortestPath(char startL[], char endL[]) {
         int start = findVertex(startL);
         int end = findVertex(endL);
@@ -84,6 +95,7 @@ public:
         int dist[MAX], prev[MAX];
         bool visited[MAX];
 
+        // initialize arrays
         for (int i = 0; i < count; i++) {
             dist[i] = INT_MAX;
             prev[i] = -1;
@@ -92,9 +104,11 @@ public:
 
         dist[start] = 0;
 
+        // main loop
         for (int i = 0; i < count; i++) {
             int cur = -1, min = INT_MAX;
 
+            // pick smallest unvisited
             for (int j = 0; j < count; j++)
                 if (!visited[j] && dist[j] < min) {
                     min = dist[j];
@@ -105,25 +119,30 @@ public:
 
             visited[cur] = true;
 
+            // relax edges
             for (int j = 0; j < count; j++)
                 if (adj[cur][j] > 0 &&
                     dist[cur] != INT_MAX &&
                     dist[cur] + adj[cur][j] < dist[j]) {
+
                     dist[j] = dist[cur] + adj[cur][j];
                     prev[j] = cur;
                 }
         }
 
+        // no path case
         if (dist[end] == INT_MAX) {
             cout << "No path\n";
             return;
         }
 
+        // build path
         int path[MAX], size = 0;
 
         for (int v = end; v != -1; v = prev[v])
             path[size++] = v;
 
+        // print path
         for (int i = size - 1; i >= 0; i--) {
             cout << labels[path[i]];
             if (i) cout << " -> ";
@@ -138,6 +157,7 @@ int main() {
     int choice, weight;
     char a[50], b[50];
 
+    // menu loop
     while (true) {
         cout << "\n1 Add Vertex";
         cout << "\n2 Add Edge";
